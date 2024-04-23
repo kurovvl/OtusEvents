@@ -11,41 +11,24 @@ namespace OtusEvents.Classes
 {
     public static class Extensions
     {
-        public static T GetMax<T>(this IEnumerable<T> collection) where T : class, ICustomConvertable
+        public static T? GetMax<T>(this IEnumerable<T> collection, Func<T, float?> convertToNumber = null) where T : class, ICustomConvertable?
         {
-            using (var enumerator = collection.GetEnumerator())
+            T? max = null;
+            var cmp = float.MinValue;
+            foreach (var item in collection)
             {
-                T max = null;
-                var cmp = float.MinValue;
-                while (enumerator.MoveNext())
+                var tmp = convertToNumber != null ? convertToNumber(item) : item?.ConvertToCompare();
+                if (tmp == null)
                 {
-                    var tmp = enumerator.Current.ConvertToCompare();
-                    if (tmp > cmp)
-                    {
-                        cmp = tmp;
-                        max = enumerator.Current;
-                    }
+                    continue;
                 }
-                return max;
-            }
-        }
-        public static T GetMax<T>(this IEnumerable<T> collection, Func<T, float> convertToNumber) where T : class
-        {
-            using (var enumerator = collection.GetEnumerator())
-            {
-                var cmp = float.MinValue;
-                T max = null;
-                while (enumerator.MoveNext())
+                if (tmp > cmp)
                 {
-                    var tmp = convertToNumber(enumerator.Current as T);
-                    if (tmp > cmp)
-                    {
-                        cmp = tmp;
-                        max = enumerator.Current;
-                    }
+                    cmp = tmp.Value;
+                    max = item;
                 }
-                return max;
             }
+            return max;
         }
     }
 

@@ -8,10 +8,9 @@ namespace OtusEvents.Classes
 {
     public class FileSeeker
     {
-        public event EventHandler<FileSeekerArgs> OnFileFound;
+        public event EventHandler<FileSeekerArgs>? OnFileFound;
+        //private event Action OnCancel;
 
-
-        private event Action OnCancel;
         private string _workDir = string.Empty;
 
         public FileSeeker(string workDir)
@@ -20,23 +19,24 @@ namespace OtusEvents.Classes
 
         }
 
-        public void Cancel()
-        {
-            OnCancel?.Invoke();
-        }
+        //public void Cancel()
+        //{
+        //    OnCancel?.Invoke();
+        //}
         public void RunSearchFiles()
         {
             using (var file = Directory.EnumerateFiles(_workDir).GetEnumerator())
             {
-                WaitKeyPressTask();
-                bool Cancel = false;
-                this.OnCancel += () => Cancel = true;
+                var args = new FileSeekerArgs();
+                WaitKeyPressTask(args);
+                //bool Cancel = false;
+                //this.OnCancel += () => Cancel = true;
                 while (file.MoveNext())
                 {
-                    var args = new FileSeekerArgs() { FileName = file.Current };
+                    args.FileName = file.Current;
                     OnFileFound?.Invoke(this, args);
 
-                    if (Cancel)
+                    if (args.Cancel)
                     {
                         Console.WriteLine("Операция прервана!");
                         break;
@@ -50,7 +50,7 @@ namespace OtusEvents.Classes
 
         }
 
-        void WaitKeyPressTask()
+        void WaitKeyPressTask(FileSeekerArgs args)
         {
             Task.Run(() =>
             {
@@ -59,7 +59,7 @@ namespace OtusEvents.Classes
                     var key = Console.ReadKey(true).Key;
                     if (key == ConsoleKey.Escape)
                     {
-                        Cancel();
+                        args.Cancel = true;
                         break;
                     }
                 }

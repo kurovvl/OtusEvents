@@ -9,10 +9,10 @@ namespace OtusEvents.Classes
 {
     public class MyCustomClass : ICustomConvertable
     {
-        public int variable { get; set; }
+        public int Variable { get; set; }
         public MyCustomClass()
         {
-            variable = new Random().Next(0, 100500);
+            Variable = new Random().Next(0, 100500);
         }
 
 

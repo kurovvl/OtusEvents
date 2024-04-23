@@ -10,9 +10,9 @@ for (var i = 0; i < 100; i++)
 }
 
 // Делегат для GetMax
-Func<MyCustomClass, float> getmax = (x) => x.GetHashCode(); 
+Func<MyCustomClass, float?> getmax = (x) => x.GetHashCode(); 
 
-Console.WriteLine($"Max: Delegate: {listObj.GetMax(getmax).variable}, Internal: {listObj.GetMax().variable}");
+Console.WriteLine($"Max: Delegate: {listObj.GetMax(getmax).Variable}, Internal: {listObj.GetMax().Variable}");
 //Console.WriteLine(String.Join('\n', listObj.Select(s => $"Number: {s.variable}\t Hash: {s.GetHashCode()}")));
 
 #endregion
