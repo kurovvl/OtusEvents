@@ -44,7 +44,7 @@ namespace OtusEvents.Classes
                     Thread.Sleep(50);
 
                 }
-
+                args.IsCompleted = true;
             }
 
 
@@ -54,7 +54,7 @@ namespace OtusEvents.Classes
         {
             Task.Run(() =>
             {
-                while (true)
+                while (!args.IsCompleted)
                 {
                     var key = Console.ReadKey(true).Key;
                     if (key == ConsoleKey.Escape)

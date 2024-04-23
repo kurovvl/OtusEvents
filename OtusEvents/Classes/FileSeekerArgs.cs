@@ -10,5 +10,6 @@ namespace OtusEvents.Classes
     {
         public string FileName {  get; set; }
         public bool Cancel { get; set; }
+        public bool IsCompleted { get; set; }
     }
 }
